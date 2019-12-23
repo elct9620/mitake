@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'mitake/api/get'
+require 'mitake/api/post'
 
 module Mitake
   # Provide API Interface
@@ -51,7 +52,6 @@ module Mitake
 
       # Execute API
       #
-      # @param client [Mitake::Client] the mitake client
       # @param params [Hash] the API params
       # @return [Mitake::API] the api response
       #

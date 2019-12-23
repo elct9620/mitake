@@ -63,7 +63,7 @@ module Mitake
       # Define attribute
       #
       # @param name [String|Symbol] the attribute name
-      # @param type [Class] the attribute type
+      # @param _type [Class] the attribute type
       #
       # @since 0.1.0
       def attribute(name, _type = String)

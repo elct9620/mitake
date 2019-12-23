@@ -1,19 +1,15 @@
 # frozen_string_literal: true
 
-require 'mitake/api'
 require 'mitake/model'
 require 'mitake/recipient'
+require 'mitake/response'
 
 module Mitake
   # Create Sort Message
   #
   # @since 0.1.0
   class Message
-    include API
     include Model
-
-    method 'Post'
-    path '/api/mtk/SmSend'
 
     # @since 0.1.0
     attribute :id, String
@@ -30,6 +26,36 @@ module Mitake
     def initialize(attributes = {})
       super
       @sent = false
+    end
+
+    # Send message
+    #
+    # @since 0.1.0
+    # @api private
+    def delivery
+      return if @sent
+
+      # TODO: Rename `Response`
+      Response.execute(params)
+    ensure
+      @sent = true
+    end
+
+    private
+
+    # The request params
+    #
+    # @since 0.1.0
+    # @api private
+    def params
+      {
+        clientid: @id,
+        smbody: @body,
+        dlvtime: @schedule_at&.strftime('%Y%m%d%H%M%S'),
+        vldtime: @expired_at&.strftime('%Y%m%d%H%M%S'),
+        dstaddr: @recipient.phone_number,
+        destname: @recipient.name
+      }.reject { |_, v| v.nil? }.to_h
     end
   end
 end

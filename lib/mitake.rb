@@ -16,7 +16,7 @@ module Mitake
   # Switch credential
   #
   # @param credential [Mitake::Credential] the api credential
-  # @param block [Proc] the actions use specify credential
+  # @param _block [Proc] the actions use specify credential
   #
   # @since 0.1.0
   def self.use(credential, &_block)

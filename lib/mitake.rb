@@ -3,6 +3,7 @@
 require 'mitake/version'
 require 'mitake/credential'
 require 'mitake/balance'
+require 'mitake/message'
 
 # The Mitake API Client
 #

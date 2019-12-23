@@ -19,6 +19,7 @@ module Mitake
 
     path '/api/mtk/SmQuery'
 
+    # @since 0.1.0
     attr_reader :amount
 
     # @since 0.1.0

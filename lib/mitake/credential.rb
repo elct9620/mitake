@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'mitake/account/point'
-
 module Mitake
   # The Mitake SMS Client
   #

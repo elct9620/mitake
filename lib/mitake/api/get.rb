@@ -5,6 +5,9 @@ require 'mitake/api/base'
 module Mitake
   module API
     # Create HTTP Get Request
+    #
+    # @since 0.1.0
+    # @api private
     class Get < Base
       # Create HTTP Get Request
       #

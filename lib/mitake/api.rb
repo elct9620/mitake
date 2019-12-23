@@ -4,6 +4,9 @@ require 'mitake/api/get'
 
 module Mitake
   # Provide API Interface
+  #
+  # @since 0.1.0
+  # @api private
   module API
     class Error < RuntimeError; end
 

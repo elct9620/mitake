@@ -1,8 +1,6 @@
-# Mitake
+# Mitake (三竹簡訊)
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/mitake`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+This is a Ruby implement to help user send SMS via 三竹簡訊 easier.
 
 ## Installation
 
@@ -22,7 +20,66 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+To send the SMS, you need to specify the username and password.
+
+```ruby
+Mitake.credential = Mitake::Credential.new('YOUR_USERNAME', 'YOUR_PASSWORD')
+```
+
+If you prefer to config it by the environment variable, please setup `MITAKE_USERNAME` and `MITAKE_PASSWORD`, the gem will automatic create credential.
+
+> The default server is `https://smsapi.mitake.com.tw` if you use a different server, please specify it manual.
+
+```ruby
+# Create recipient and give phone number
+recipient = Mitake::Recipient.new(phone_number: '09xxxxxxxx', name: 'John')
+
+# Create message with body
+message = Mitake::Message.new(recipient: recipient, body: 'Hello World!')
+
+# Delivery message
+message.delivery
+
+# Check status
+puts message.status unless message.sent?
+```
+
+### Switch Credential
+
+If you have multiple credentials, you can switch it in the runtime.
+
+```ruby
+external = Mitake::Credential.new('xxx', 'xxx')
+
+Mitake.use(external) do
+  # Replace default credential with external
+end
+
+# Switch back to use default credential
+```
+
+### Message Attributes
+
+|Name|Type|Description
+|----|----|-----------
+|id|String| `Readonly` The message ID from Mitake
+|source_id|String| The customize identity, if same `source_id` send to Mitake, it will response duplicate flag
+|recipient|Mitake::Recipient| The recipient of message
+|body|String| The message body
+|schedule_at|Time| The schedule time to send message
+|expired_at|Time| The message expire time, max value is `+ 24h`
+|duplicate|TrueClass|FalseClass| `Readonly` The message is duplicate (already sent)
+|status_code|Integer| `Readonly` The message status
+
+## Roadmap
+
+* [ ] Rspec tests
+* [ ] Message
+  * [x] Delivery
+  * [ ] Batch Delivery
+  * [ ] Webhook
+  * [ ] Query Status
+  * [ ] Cancel
 
 ## Development
 
@@ -32,8 +89,8 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/mitake. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+Bug reports and pull requests are welcome on GitHub at https://github.com/elct9620/mitake. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
 
 ## Code of Conduct
 
-Everyone interacting in the Mitake project’s codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/mitake/blob/master/CODE_OF_CONDUCT.md).
+Everyone interacting in the Mitake project’s codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/elct9620/mitake/blob/master/CODE_OF_CONDUCT.md).

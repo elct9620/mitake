@@ -1,4 +1,5 @@
 # Mitake (三竹簡訊)
+[![Build Status](https://travis-ci.com/elct9620/mitake.svg?branch=master)](https://travis-ci.com/elct9620/mitake) [![Gem Version](https://badge.fury.io/rb/mitake.svg)](https://badge.fury.io/rb/mitake) [![Maintainability](https://api.codeclimate.com/v1/badges/2da932d77d1a2d37a18a/maintainability)](https://codeclimate.com/github/elct9620/mitake/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/2da932d77d1a2d37a18a/test_coverage)](https://codeclimate.com/github/elct9620/mitake/test_coverage)
 
 This is a Ruby implement to help user send SMS via 三竹簡訊 easier.
 
@@ -68,7 +69,7 @@ end
 |body|String| The message body
 |schedule_at|Time| The schedule time to send message
 |expired_at|Time| The message expire time, max value is `+ 24h`
-|duplicate|TrueClass|FalseClass| `Readonly` The message is duplicate (already sent)
+|duplicate|TrueClass/FalseClass| `Readonly` The message is duplicate (already sent)
 |status_code|Integer| `Readonly` The message status
 
 ## Roadmap

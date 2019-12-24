@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'mitake/parser'
 require 'mitake/api/get'
 require 'mitake/api/post'
 
@@ -50,20 +51,59 @@ module Mitake
         @method = method.to_s.capitalize
       end
 
+      # Set response field mapping
+      #
+      # @param from [String] the response field
+      # @param to [String] the target field
+      #
+      # @since 0.1.0
+      # @api private
+      def map(from, to)
+        @mapping ||= {}
+        @mapping[from.to_s] = to.to_s
+      end
+
       # Execute API
       #
       # @param params [Hash] the API params
+      # @param _block [Proc] the customize process
       # @return [Mitake::API] the api response
       #
       # @since 0.1.0
       # @api private
-      def execute(params = {})
-        klass = API.const_get(method)
-        res = klass.new(path, params).execute
-        return new(res) if res.is_a?(Net::HTTPOK)
+      def execute(params = {}, &_block)
+        res = request(params)
+        raise Mitake::API::Error, res.code unless res.is_a?(Net::HTTPOK)
 
-        # TODO: Improve error message
-        raise Mitake::API::Error, res.code
+        items = Parser.new(res).parse.map { |item| rename_attribute(item) }
+        return items.map { |item| new(item) } unless block_given?
+
+        yield items
+      end
+
+      private
+
+      # Send HTTP Request
+      #
+      # @return [Net::HTTPResponse] the http response
+      #
+      # @since 0.1.0
+      # @api private
+      def request(params = {})
+        klass = API.const_get(method)
+        klass.new(path, params).execute
+      end
+
+      # Rename attributes
+      #
+      # @param item [Hash] the source hash
+      #
+      # @since 0.1.0
+      # @api private
+      def rename_attribute(item)
+        item.map do |key, value|
+          [@mapping[key] || key, value]
+        end.to_h
       end
     end
   end

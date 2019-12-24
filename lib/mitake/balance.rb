@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
-require 'forwardable'
-
 require 'mitake/api'
+require 'mitake/model'
 
 module Mitake
   # Get the current balance
@@ -10,22 +9,27 @@ module Mitake
   # @since 0.1.0
   class Balance
     class << self
-      extend Forwardable
-
-      delegate %i[amount] => :execute
+      # Get account point
+      #
+      # @see Mitake::Balance#amount
+      # @return [Integer]
+      #
+      # @since 0.1.0
+      def amount
+        execute&.first&.amount
+      end
     end
 
     include API
+    include Model
 
     path '/api/mtk/SmQuery'
+    map 'AccountPoint', 'amount'
 
+    # @!attribute [r] amount
+    # @return [Integer] the amount of account point
+    #
     # @since 0.1.0
-    attr_reader :amount
-
-    # @since 0.1.0
-    def initialize(response)
-      _, amount = response.body.split('=')
-      @amount = amount.to_i
-    end
+    attribute :amount, Integer
   end
 end

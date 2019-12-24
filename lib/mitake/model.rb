@@ -68,7 +68,7 @@ module Mitake
       # @since 0.1.0
       def attribute(name, _type = String)
         @attributes ||= []
-        @attributes << name
+        @attributes << name.to_s
 
         define_method name do
           instance_variable_get("@#{name}")

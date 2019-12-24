@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+require 'mitake/model/attributes'
+require 'mitake/model/accessor'
+
 module Mitake
   # Provide attributes accessor
   #
@@ -10,24 +13,8 @@ module Mitake
     # @api private
     def self.included(base)
       base.class_eval do
-        extend ClassMethods
-      end
-    end
-
-    # @since 0.1.0
-    # @api private
-    def initialize(attributes = {})
-      assign_attributes(attributes)
-    end
-
-    # Assign attribute by hash
-    #
-    # @param attributes [Hash] the attributes to assignment
-    #
-    # @since 0.1.0
-    def assign_attributes(attributes = {})
-      attributes.each do |key, value|
-        send("#{key}=", value)
+        include Attributes
+        extend Accessor
       end
     end
 
@@ -46,39 +33,6 @@ module Mitake
           [attr, value.respond_to?(:attributes) ? value.attributes : value]
         end
         .to_h
-    end
-
-    # @since 0.1.0
-    # @api private
-    module ClassMethods
-      # Get attributes
-      #
-      # @return [Array] the list of attributes
-      #
-      # @since 0.1.0
-      def attributes
-        @attributes ||= []
-      end
-
-      # Define attribute
-      #
-      # @param name [String|Symbol] the attribute name
-      # @param _type [Class] the attribute type
-      #
-      # @since 0.1.0
-      def attribute(name, _type = String)
-        @attributes ||= []
-        @attributes << name.to_s
-
-        define_method name do
-          instance_variable_get("@#{name}")
-        end
-
-        define_method "#{name}=" do |value|
-          # TODO: Implement type cast
-          instance_variable_set("@#{name}", value)
-        end
-      end
     end
   end
 end

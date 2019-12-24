@@ -4,6 +4,7 @@ require 'mitake/model'
 require 'mitake/recipient'
 require 'mitake/response'
 require 'mitake/boolean'
+require 'mitake/status'
 
 module Mitake
   # Create Sort Message
@@ -17,6 +18,7 @@ module Mitake
     path '/api/mtk/SmSend?CharsetURL=UTF8'
     map 'msgid', 'id'
     map 'Duplicate', 'duplicate'
+    map 'statuscode', 'status_code'
 
     # @!attribute [r] id
     # @return [String] the message id
@@ -45,6 +47,10 @@ module Mitake
     # @!attribute [r] duplicate
     # @return [TrueClass|FalseClass] is the message duplicate
     attribute :duplicate, Boolean
+
+    # @!attribute [r] status_code
+    # @return [Integer] the status code
+    attribute :status_code, Integer
 
     # Send message
     #
@@ -77,6 +83,15 @@ module Mitake
     # @since 0.1.0
     def duplicate?
       @duplicate == true
+    end
+
+    # Readable status code
+    #
+    # @return [String] the status code description
+    #
+    # @since 0.1.0
+    def status
+      Status::CODES[@status_code]
     end
 
     private

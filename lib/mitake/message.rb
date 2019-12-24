@@ -3,6 +3,7 @@
 require 'mitake/model'
 require 'mitake/recipient'
 require 'mitake/response'
+require 'mitake/boolean'
 
 module Mitake
   # Create Sort Message
@@ -15,8 +16,9 @@ module Mitake
     method 'Post'
     path '/api/mtk/SmSend?CharsetURL=UTF8'
     map 'msgid', 'id'
+    map 'Duplicate', 'duplicate'
 
-    # @!attribute id
+    # @!attribute [r] id
     # @return [String] the message id
     attribute :id, String
 
@@ -40,22 +42,16 @@ module Mitake
     # @return [Time|NilClass] the valid time for this message
     attribute :expired_at, Time
 
-    # Create a new mesage
-    #
-    # @return [Mitake::Message]
-    #
-    # @since 0.1.0
-    def initialize(attributes = {})
-      super
-      @sent = false
-    end
+    # @!attribute [r] duplicate
+    # @return [TrueClass|FalseClass] is the message duplicate
+    attribute :duplicate, Boolean
 
     # Send message
     #
     # @since 0.1.0
     # @api private
     def delivery
-      return self if @sent
+      return self if sent?
 
       self.class.execute(params) do |items|
         attrs = items&.first&.slice(*self.class.attributes)
@@ -63,8 +59,24 @@ module Mitake
       end
 
       self
-    ensure
-      @sent = true
+    end
+
+    # Does message is sent
+    #
+    # @return [TrueClass|FalseClass] is the message sent
+    #
+    # @since 0.1.0
+    def sent?
+      !@id.nil?
+    end
+
+    # Does message is duplicate
+    #
+    # @return [TrueClass|FalseClass] is the message duplicate
+    #
+    # @since 0.1.0
+    def duplicate?
+      @duplicate == true
     end
 
     private

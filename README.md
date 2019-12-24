@@ -32,6 +32,9 @@ If you prefer to config it by the environment variable, please setup `MITAKE_USE
 > The default server is `https://smsapi.mitake.com.tw` if you use a different server, please specify it manual.
 
 ```ruby
+# Get the balance in the account
+puts "Point: #{Mitake::Balance.amount}"
+
 # Create recipient and give phone number
 recipient = Mitake::Recipient.new(phone_number: '09xxxxxxxx', name: 'John')
 

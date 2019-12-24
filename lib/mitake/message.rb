@@ -22,7 +22,7 @@ module Mitake
 
     # @!attribute [r] id
     # @return [String] the message id
-    attribute :id, String
+    attribute :id, String, readonly: true
 
     # @!attribute source_id
     # @return [String] the customize identity
@@ -46,11 +46,11 @@ module Mitake
 
     # @!attribute [r] duplicate
     # @return [TrueClass|FalseClass] is the message duplicate
-    attribute :duplicate, Boolean
+    attribute :duplicate, Boolean, readonly: true
 
     # @!attribute [r] status_code
     # @return [Integer] the status code
-    attribute :status_code, Integer
+    attribute :status_code, Integer, readonly: true
 
     # Send message
     #
@@ -60,7 +60,7 @@ module Mitake
       return self if sent?
 
       self.class.execute(params) do |items|
-        attrs = items&.first&.slice(*self.class.attributes)
+        attrs = items&.first&.slice(*self.class.attribute_names)
         assign_attributes(attrs)
       end
 

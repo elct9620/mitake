@@ -9,7 +9,12 @@ module Mitake
     TRUE_VALUES = %w[Y 1 yes true].freeze
 
     class << self
+      # Parse boolean value
+      #
+      # @since 0.1.0
+      # @api private
       def parse(value)
+        return true if value == true
         return true if TRUE_VALUES.include?(value)
 
         false

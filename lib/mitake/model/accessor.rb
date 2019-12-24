@@ -10,29 +10,39 @@ module Mitake
     module Accessor
       # Get attributes
       #
-      # @return [Array] the list of attributes
+      # @return [Hash] the list of attributes and type
       #
       # @since 0.1.0
       def attributes
-        @attributes ||= []
+        @attributes ||= {}
+      end
+
+      # Get attribute names
+      #
+      # @return [Array] the list of attribute names
+      #
+      # @since 0.1.0
+      def attribute_names
+        attributes.keys
       end
 
       # Define attribute
       #
       # @param name [String|Symbol] the attribute name
-      # @param _type [Class] the attribute type
+      # @param type [Class] the attribute type
+      # @param readonly [TrueClass|FalseClass] is attribute readonly
       #
       # @since 0.1.0
-      def attribute(name, type = 'String')
-        @attributes ||= []
-        @attributes << name.to_s
+      def attribute(name, type = 'String', readonly: false)
+        @attributes ||= {}
+        @attributes[name.to_s] = type.to_s
 
         define_method name do
           instance_variable_get("@#{name}")
         end
+        return if readonly
 
         define_method "#{name}=" do |value|
-          # TODO: Implement type cast
           instance_variable_set("@#{name}", self.class.cast(value, type.to_s))
         end
       end

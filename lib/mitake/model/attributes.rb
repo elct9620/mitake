@@ -18,7 +18,11 @@ module Mitake
       # @since 0.1.0
       def assign_attributes(attributes = {})
         attributes.each do |key, value|
-          send("#{key}=", value)
+          next unless self.class.attribute_names.include?(key.to_s)
+          next send("#{key}=", value) if respond_to?("#{key}=")
+
+          type = self.class.attributes[key.to_s]
+          instance_variable_set("@#{key}", self.class.cast(value, type))
         end
       end
     end

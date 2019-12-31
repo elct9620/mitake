@@ -44,6 +44,10 @@ module Mitake
     # @return [Time|NilClass] the valid time for this message
     attribute :expired_at, Time
 
+    # @!attribute webhook_url
+    # @return [String|NilClass] the response callback url
+    attribute :webhook_url, String
+
     # @!attribute [r] duplicate
     # @return [TrueClass|FalseClass] is the message duplicate
     attribute :duplicate, Boolean, readonly: true
@@ -107,7 +111,8 @@ module Mitake
         dlvtime: @schedule_at&.strftime('%Y%m%d%H%M%S'),
         vldtime: @expired_at&.strftime('%Y%m%d%H%M%S'),
         dstaddr: @recipient.phone_number,
-        destname: @recipient.name
+        destname: @recipient.name,
+        response: @webhook_url
       }.reject { |_, v| v.nil? }.to_h
     end
   end

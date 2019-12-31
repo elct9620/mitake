@@ -72,6 +72,7 @@ end
 |body|String| The message body
 |schedule_at|Time| The schedule time to send message
 |expired_at|Time| The message expire time, max value is `+ 24h`
+|webhook_url|String| The Callback URL for Mitake response status
 |duplicate|TrueClass/FalseClass| `Readonly` The message is duplicate (already sent)
 |status_code|Integer| `Readonly` The message status
 

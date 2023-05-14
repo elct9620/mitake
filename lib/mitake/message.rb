@@ -64,7 +64,7 @@ module Mitake
       return self if sent?
 
       self.class.execute(params) do |items|
-        attrs = items&.first&.slice(*self.class.attribute_names)
+        attrs = items.first
         assign_attributes(attrs)
       end
 
@@ -108,8 +108,8 @@ module Mitake
       {
         clientid: @source_id,
         smbody: @body,
-        dlvtime: @schedule_at&.strftime('%Y%m%d%H%M%S'),
-        vldtime: @expired_at&.strftime('%Y%m%d%H%M%S'),
+        dlvtime: @schedule_at && @schedule_at.strftime('%Y%m%d%H%M%S'),
+        vldtime: @expired_at && @expired_at.strftime('%Y%m%d%H%M%S'),
         dstaddr: @recipient.phone_number,
         destname: @recipient.name,
         response: @webhook_url
